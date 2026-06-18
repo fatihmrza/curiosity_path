@@ -1,79 +1,49 @@
-Pfadsuche auf Graphen (Greedy & Rekursiv) mit Laufzeitmessung
-====================================================================
+Path Search on Graphs (Greedy & Recursive) with Runtime Measurement
+Overview
+This program implements two different approaches to find the best possible path on a graph from the node "start" to the node "end":
 
-Überblick
----------
-Es werden in diesem Programm zwei verschiedene Ansätze umgesetzt, um auf einem Graphen
-einen möglichst guten Pfad vom Knoten „start“ zum Knoten „end“ zu finden:
+a greedy approach that always selects the most attractive next step at each decision point,
+a recursive approach that considers multiple possible paths and evaluates them based on a ratio of cost and prize value.
 
-- ein Greedy-Verfahren, das bei jeder Entscheidung den attraktivsten nächsten Schritt wählt,
-- ein rekursiver Ansatz, der mehrere mögliche Wege betrachtet und diese anhand eines Verhältnisses
-  aus Aufwand und Ablenkungswert bewertet.
+Additionally, there is a runtime measurement module that compares both approaches using time and timeit.
+Project Structure
+1. Main Module (main)
 
-Zusätzlich gibt es noch ein Modul zur Laufzeitmessung, das beide Verfahren
-mithilfe von `time` und `timeit` miteinander vergleicht.
+This module serves as the entry point for the program. The user selects which algorithm to run. The found path as well as the total accumulated cost and prize value are then displayed. Module docstring: "This module includes a main function to execute the algorithm"
+2. apply_algorithm.py
 
-Projektstruktur
----------------
+This file contains the actual algorithms for path calculation. It accesses the graph structure from Graph.py and evaluation functions from optimisation.py.
 
-1) Hauptmodul (main)
+Functions included:
 
-   Dieses Modul dient als Einstiegspunkt für das Programm. Der Benutzer wählt, welcher Algorithmus ausgeführt werden
-   soll.
-   Dann werden der gefundene Pfad sowie die aufsummierten Kosten und Ablenkungswert ausgegeben.
-   Modul-Docstring:
-   "This module includes a main function to execute the algorithm"
+greedy_algo(graph, path1, path2): Compares two possible edges based on their prize value from graph.edges and decides in favor of the cheaper option.
+greedy_progress(graph): Repeatedly traverses the graph from "start" to "end", making decisions using the greedy principle. Returns the path, total cost, and total prize value.
+recursive_progress(graph, current_node, end_node, visited=None, cost=0, prize=0, paths=None): Builds paths using the recursive approach until the target node is reached. Uses ratio_value() from optimisation.py for multi-objective optimization.
 
-2) apply_algorithm.py
+3. Graph.py
 
-   In dieser Datei befinden sich die eigentlichen Algorithmen zur Pfadberechnung.
-   Sie greift auf die Graph-Struktur aus `Graph.py` und auf Bewertungsfunktionen
-   aus `optimisation.py` zurück.
+This module provides the graph data structure. Module docstring: "This module contains a class structure to define a graph"
 
-   Enthaltene Funktionen:
-    - greedy_algo(graph, path1, path2):
-      Vergleicht zwei mögliche Kanten anhand ihres prize-Wertes aus `graph.edges`
-      und entscheidet sich für die günstigere Option.
-    - greedy_progress(graph):
-      Durchläuft den Graphen wiederholend von „start“ bis „end“ und trifft Entscheidungen
-      mithilfe des Greedy-Prinzips. Daraus werden Pfad, Gesamtkosten und Gesamtablenkungswert zurückgegeben.
-    - recursive_progress(graph, current_node, end_node, visited=None, cost=0, prize=0, paths=None):
-      Baut Pfade nach dem rekursiven Ansatz auf, bis der Zielknoten erreicht ist. Hier wird zur Mehrzieloptimierung ratio_value() von
-      optimisation.py implementiert.
+Core class:
 
-3) Graph.py
+Graph
 
-   Dieses Modul stellt die Graph-Datenstruktur bereit.
-   Modul-Docstring:
-   "This module contains a class structure to define a graph"
+nodes: initially contains the nodes ["start", "B", "C", "D", "E", "end"]
+edges: Dictionary with edge data in the format ((node1, node2) → (cost, prize)). Edges are stored twice since the graph is modeled as undirected. Methods:
+add_node(node): adds a new node
+add_edge(node1, node2, cost, prize): adds an edge if both nodes exist
 
-   Zentrale Klasse:
-    - Graph
-        - nodes: enthält initial die Knoten ["start", "B", "C", "D", "E", "end"]
-        - edges: Dictionary mit Kantendaten im Format ((node1, node2) → (cost, prize))
-          Die Kanten sind doppelt gespeichert, da der Graph als ungerichtet modelliert ist.
-          Methoden:
-        - add_node(node): fügt einen neuen Knoten hinzu
-        - add_edge(node1, node2, cost, prize): ergänzt eine Kante, sofern beide Knoten existieren
 
-4) optimisation.py
 
-   Dieses Modul macht den Vergleich und die Bewertung verschiedener Pfade.
-   Modul-Docstring:
-   "This module includes three algorithm functions for the optimise the specific structure"
+4. optimisation.py
 
-   Enthaltene Funktionen:
-    - ratio_value(r1, r2):
-      Vergleicht zwei Pfade anhand des prize-/cost-Verhältnisses und berücksichtigt Sonderfälle
-      wie `None` oder Division durch Null.
-    - internal_comparison(p1, p2):
-      Bevorzugt Pfade mit höherem prize, bei Gleichstand entscheidet die geringere cost.
-    - score_cal(path, k1=0.35, k2=0.65):
-      Berechnet einen gewichteten Score aus Aufwand und Ablenkungswert.
+This module handles the comparison and evaluation of different paths. Module docstring: "This module includes three algorithm functions for the optimise the specific structure"
 
+Functions included:
+
+ratio_value(r1, r2): Compares two paths based on the prize/cost ratio and handles edge cases such as None or division by zero.
+internal_comparison(p1, p2): Prefers paths with a higher prize; in case of a tie, the lower cost decides.
+score_cal(path, k1=0.35, k2=0.65): Calculates a weighted score from cost and prize value.
 
 Doctests
---------
-Mehrere Module enthalten Doctest-Abschnitte, die bei der Ausführung automatisch getestet werden. Bei der Laufzeitmessung
-sind diese Tests teilweise
-nur kommentiert vorhanden, weil die Ergebnisse unterschiedlich sind und dadurch zum Fail geführt wird. 
+Several modules contain doctest sections that are automatically tested upon execution. In the runtime measurement module, some of these tests are only present as comments, because the results vary and would otherwise cause test failures.
