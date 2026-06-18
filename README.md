@@ -71,22 +71,6 @@ Projektstruktur
     - score_cal(path, k1=0.35, k2=0.65):
       Berechnet einen gewichteten Score aus Aufwand und Ablenkungswert.
 
-5) Laufzeitmessung (time / timeit)
-
-   Dieses Modul vergleicht die Zeit der Algorithmen.
-   Es werden `time` und `timeit` verwendet.
-   P.s: Nach unserer eigenen Annahme haben wir Testdaten als die Angabe von sich ändernden Messungsdaten
-   aufgefasst und deswegen in Kommentaren werden 3 Zeitmessungen von jeweiligen Algorithmen für 
-   time und timeit Modul implementiert. Es wurde auch nochmal in Docstring erklärt.
-
-   Enthaltene Funktionen:
-    - time_measure(func, graph)
-    - timeit_measure(func, graph)
-    - algorithm_timing():
-      Erstellt einen Graphen, misst die Laufzeiten von Greedy- und rekursivem Verfahren
-      und gibt die Ergebnisse auf der Konsole aus.
-      Hinweis:
-      Doctests hier nur teilweise sinnvoll.
 
 Doctests
 --------
